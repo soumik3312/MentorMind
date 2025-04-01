@@ -1,0 +1,23 @@
+from fastapi import APIRouter
+from auth import router as auth_router
+from ai_engine import router as ai_router
+from database import get_db
+
+# Create a main router
+router = APIRouter()
+
+# Include authentication routes
+router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+
+# Include AI engine routes
+router.include_router(ai_router, prefix="/ai", tags=["AI Learning"])
+
+@router.get("/")
+def root():
+    return {"message": "API is running successfully!"}
+
+@router.get("/health")
+def health_check():
+    """Checks the health of the API and database connectivity."""
+    db = next(get_db())
+    return {"status": "Healthy", "database": "Connected"}

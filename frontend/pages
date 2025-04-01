@@ -1,0 +1,5 @@
+import Home from "c/components/Home"; // Ensure correct path
+
+export default function IndexPage() {
+  return <Home/>;
+}

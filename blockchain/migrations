@@ -1,0 +1,28 @@
+const { ethers } = require("hardhat");
+
+async function migrate() {
+    const [deployer] = await ethers.getSigners();
+    console.log("Migrating contracts with the account:", deployer.address);
+
+    // Fetch deployed contract instances
+    const Identity = await ethers.getContract("Identity");
+    const Learning = await ethers.getContract("Learning");
+    const RewardToken = await ethers.getContract("RewardToken");
+
+    console.log("Identity contract at:", Identity.address);
+    console.log("Learning contract at:", Learning.address);
+    console.log("RewardToken contract at:", RewardToken.address);
+
+    // Example migration logic (if needed)
+    console.log("Setting up initial contract configurations...");
+    // Add custom migration logic here
+
+    console.log("Migration complete!");
+}
+
+migrate()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

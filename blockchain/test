@@ -1,0 +1,43 @@
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
+
+describe("MentorMind Smart Contracts", function () {
+    let owner, user;
+    let Identity, identity;
+    let Learning, learning;
+    let RewardToken, rewardToken;
+
+    before(async function () {
+        [owner, user] = await ethers.getSigners();
+
+        Identity = await ethers.getContractFactory("Identity");
+        identity = await Identity.deploy();
+        await identity.deployed();
+
+        Learning = await ethers.getContractFactory("Learning");
+        learning = await Learning.deploy();
+        await learning.deployed();
+
+        RewardToken = await ethers.getContractFactory("RewardToken");
+        rewardToken = await RewardToken.deploy();
+        await rewardToken.deployed();
+    });
+
+    it("Should deploy Identity contract successfully", async function () {
+        expect(identity.address).to.properAddress;
+    });
+
+    it("Should deploy Learning contract successfully", async function () {
+        expect(learning.address).to.properAddress;
+    });
+
+    it("Should deploy RewardToken contract successfully", async function () {
+        expect(rewardToken.address).to.properAddress;
+    });
+
+    it("Should issue rewards successfully", async function () {
+        await rewardToken.issueReward(user.address, ethers.utils.parseEther("10"));
+        const balance = await rewardToken.balanceOf(user.address);
+        expect(balance).to.equal(ethers.utils.parseEther("10"));
+    });
+});

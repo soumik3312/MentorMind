@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@metamask/providers": "^21.0.0",
+    "ethers": "^6.13.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}

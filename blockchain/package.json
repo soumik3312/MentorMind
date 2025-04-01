@@ -1,0 +1,22 @@
+{
+    "name": "mentormind-blockchain",
+    "version": "1.0.0",
+    "description": "Smart contracts and blockchain logic for MentorMind platform",
+    "scripts": {
+      "compile": "hardhat compile",
+      "deploy": "hardhat run scripts/deploy.js --network sepolia",
+      "migrate": "node migrations.js",
+      "test": "hardhat test"
+    },
+    "dependencies": {
+      "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+      "dotenv": "^16.0.3",
+      "ethers": "^5.7.0",
+      "hardhat": "^2.14.0"
+    },
+    "devDependencies": {
+      "chai": "^4.3.7",
+      "mocha": "^10.2.0"
+    }
+  }
+  

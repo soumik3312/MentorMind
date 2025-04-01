@@ -1,0 +1,50 @@
+import pytest
+from fastapi.testclient import TestClient
+from main import app
+from database import get_db, SessionLocal
+from models import Base, engine
+from sqlalchemy.orm import sessionmaker
+
+# Create a test database
+TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.create_all(bind=engine)
+
+def override_get_db():
+    db = TestSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+app.dependency_overrides[get_db] = override_get_db
+client = TestClient(app)
+
+# Test Home Route
+def test_home():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Welcome to the AI-Powered Learning Assistant API!"}
+
+# Test User Registration
+def test_create_user():
+    response = client.post("/auth/register", json={"username": "testuser", "password": "testpass"})
+    assert response.status_code == 201
+    assert "id" in response.json()
+
+# Test User Login
+def test_user_login():
+    response = client.post("/auth/login", json={"username": "testuser", "password": "testpass"})
+    assert response.status_code == 200
+    assert "access_token" in response.json()
+
+# Test Course Creation
+def test_create_course():
+    response = client.post("/ai/courses", json={"title": "Test Course", "description": "This is a test course."})
+    assert response.status_code == 201
+    assert response.json()["title"] == "Test Course"
+
+# Test Fetch Courses
+def test_get_courses():
+    response = client.get("/ai/courses")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
